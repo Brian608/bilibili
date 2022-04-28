@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.feather.bilibili.dao.UserDao">
+    <insert id="addUser" parameterType="org.feather.bilibili.domain.User" useGeneratedKeys="true" keyProperty="id">
+    insert into t_user(
+                       phone,
+                       email,
+                       password,
+                       salt,
+                       createTime
+    )values (
+             #{phone},
+             #{email},
+             #{password},
+             #{salt},
+             #{createTime}
+                )
+    </insert>
+        <insert id="addUserInfo" parameterType="org.feather.bilibili.domain.UserInfo">
+            insert into
+                t_user_info(
+                userId,
+                nick,
+                avatar,
+                sign,
+                gender,
+                birth,
+                createTime
+            )values (
+                        #{userId},
+                        #{nick},
+                        #{avatar},
+                        #{sign},
+                        #{gender},
+                        #{birth},
+                        #{createTime}
+                    )
+    </insert>
+
+
+    <select id="getUserByPhone" parameterType="java.lang.String" resultType="org.feather.bilibili.domain.User">
+        select * from t_user where phone= #{phone}
+    </select>
+</mapper>

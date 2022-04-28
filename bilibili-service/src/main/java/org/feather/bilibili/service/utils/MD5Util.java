@@ -1,4 +1,4 @@
-package org.feather.bilibili.bilibili.service.utils;
+package org.feather.bilibili.service.utils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;

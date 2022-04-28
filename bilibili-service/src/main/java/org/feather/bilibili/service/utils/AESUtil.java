@@ -1,4 +1,4 @@
-package org.feather.bilibili.bilibili.service.utils;
+package org.feather.bilibili.service.utils;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.Cipher;

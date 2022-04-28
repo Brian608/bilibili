@@ -1,4 +1,4 @@
-package org.feather.bilibili.bilibili.domain;
+package org.feather.bilibili.domain;
 
 import java.util.Date;
 

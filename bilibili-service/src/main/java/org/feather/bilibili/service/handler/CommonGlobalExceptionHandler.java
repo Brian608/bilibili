@@ -1,7 +1,7 @@
-package org.feather.bilibili.bilibili.service.handler;
+package org.feather.bilibili.service.handler;
 
-import org.feather.bilibili.bilibili.domain.JsonResponse;
-import org.feather.bilibili.bilibili.domain.exception.ConditionException;
+import org.feather.bilibili.domain.JsonResponse;
+import org.feather.bilibili.domain.exception.ConditionException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpRequest;

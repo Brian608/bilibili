@@ -1,4 +1,4 @@
-package org.feather.bilibili.bilibili.service.config;
+package org.feather.bilibili.service.config;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;

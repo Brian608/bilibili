@@ -1,4 +1,4 @@
-package org.feather.bilibili.bilibili.domain.exception;
+package org.feather.bilibili.domain.exception;
 
 import java.nio.channels.ConnectionPendingException;
 import java.sql.Connection;

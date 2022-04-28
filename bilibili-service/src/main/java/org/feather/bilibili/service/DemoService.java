@@ -1,4 +1,4 @@
-package org.feather.bilibili.bilibili.service;
+package org.feather.bilibili.service;
 
 import org.springframework.stereotype.Service;
 

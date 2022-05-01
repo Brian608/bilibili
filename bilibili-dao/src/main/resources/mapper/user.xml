@@ -9,7 +9,7 @@
                        email,
                        password,
                        salt,
-                       createTime
+                       create_time
     )values (
              #{phone},
              #{email},
@@ -21,13 +21,13 @@
         <insert id="addUserInfo" parameterType="org.feather.bilibili.domain.UserInfo">
             insert into
                 t_user_info(
-                userId,
+                user_id,
                 nick,
                 avatar,
                 sign,
                 gender,
                 birth,
-                createTime
+                create_time
             )values (
                         #{userId},
                         #{nick},
@@ -42,5 +42,11 @@
 
     <select id="getUserByPhone" parameterType="java.lang.String" resultType="org.feather.bilibili.domain.User">
         select * from t_user where phone= #{phone}
+    </select>
+    <select id="getUserByUserId" resultType="org.feather.bilibili.domain.User">
+        select * from t_user where  id=#{userId}
+    </select>
+    <select id="getUserInfoByUserId" resultType="org.feather.bilibili.domain.UserInfo">
+        select * from t_user_info where  userId=#{userId}
     </select>
 </mapper>

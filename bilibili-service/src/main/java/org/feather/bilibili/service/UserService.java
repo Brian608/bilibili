@@ -11,6 +11,7 @@ import org.feather.bilibili.service.utils.RSAUtil;
 import org.feather.bilibili.service.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -25,36 +26,37 @@ public class UserService {
         @Autowired
        private UserDao userDao;
 
+        @Transactional(rollbackFor = Exception.class)
     public void addUser(User user) {
-        String phone=user.getPhone();
-        if (StringUtils.isNullOrEmpty(phone)){
-            throw new ConditionException("手机号为空");
+        String phone = user.getPhone();
+        if(StringUtils.isNullOrEmpty(phone)){
+            throw new ConditionException("手机号不能为空！");
         }
         User dbUser = this.getUserByPhone(phone);
-        if (dbUser!=null){
-            throw  new ConditionException("该手机号已经被注册了");
+        if(dbUser != null){
+            throw new ConditionException("该手机号已经注册！");
         }
-        Date date=new Date();
-        String salt=String.valueOf(date.getTime());
-        String password=user.getPassword();
+        Date now = new Date();
+        String salt = String.valueOf(now.getTime());
+        String password = user.getPassword();
         String rawPassword;
-        try {
-           rawPassword= RSAUtil.decrypt(password);
-        } catch (Exception e) {
-            throw  new ConditionException("密码解密失败！");
+        try{
+            rawPassword = RSAUtil.decrypt(password);
+        }catch (Exception e){
+            throw new ConditionException("密码解密失败！");
         }
         String md5Password = MD5Util.sign(rawPassword, salt, "UTF-8");
-        user.setPassword(md5Password);
         user.setSalt(salt);
-        user.setCreateTime(date);
+        user.setPassword(md5Password);
+        user.setCreateTime(now);
         userDao.addUser(user);
         //添加用户信息
-        UserInfo userInfo=new UserInfo();
+        UserInfo userInfo = new UserInfo();
         userInfo.setUserId(user.getId());
         userInfo.setNick(UserConstant.DEFAULT_NICK);
         userInfo.setBirth(UserConstant.DEFAULT_BIRTH);
-        userInfo.setGender(UserConstant.GENDER_FEMALE);
-        userInfo.setCreateTime(date);
+        userInfo.setGender(UserConstant.GENDER_MALE);
+        userInfo.setCreateTime(now);
         userDao.addUserInfo(userInfo);
 
     }
@@ -62,7 +64,7 @@ public class UserService {
         return  userDao.getUserByPhone(phone);
     }
 
-    public String login(User user) {
+    public String login(User user) throws Exception {
         String phone=user.getPhone();
         if (StringUtils.isNullOrEmpty(phone)){
             throw  new ConditionException("手机号不能为空！");
@@ -73,19 +75,23 @@ public class UserService {
         }
         String password = user.getPassword();
         String rawPassword;
-        try {
-            rawPassword=RSAUtil.decrypt(password);
-        }catch ( Exception e){
-            throw  new ConditionException("密码解密失败");
+        try{
+            rawPassword = RSAUtil.decrypt(password);
+        }catch (Exception e){
+            throw new ConditionException("密码解密失败！");
         }
-        String salt = user.getSalt();
+        String salt = dbUser.getSalt();
         String md5Password = MD5Util.sign(rawPassword, salt, "UTF-8");
-        if (!md5Password.equals(dbUser.getPassword())){
-                throw new ConditionException("密码解密失败！");
+        if(!md5Password.equals(dbUser.getPassword())){
+            throw new ConditionException("密码错误！");
         }
-       TokenUtil tokenUtil=new TokenUtil();
-        return tokenUtil.generateToken(dbUser.getId());
+        return TokenUtil.generateToken(dbUser.getId());
+    }
 
-
+    public User getUserInfo(Long userId) {
+     User user=    userDao.getUserByUserId(userId);
+     UserInfo userInfo=userDao.getUserInfoByUserId(userId);
+     user.setUserInfo(userInfo);
+     return user;
     }
 }

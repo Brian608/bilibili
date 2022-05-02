@@ -1,8 +1,10 @@
 package org.feather.bilibili.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mysql.cj.util.StringUtils;
 import org.feather.bilibili.constant.UserConstant;
 import org.feather.bilibili.dao.UserDao;
+import org.feather.bilibili.domain.PageResult;
 import org.feather.bilibili.domain.User;
 import org.feather.bilibili.domain.UserInfo;
 import org.feather.bilibili.domain.exception.ConditionException;
@@ -13,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @program: bilibili
@@ -93,5 +98,46 @@ public class UserService {
      UserInfo userInfo=userDao.getUserInfoByUserId(userId);
      user.setUserInfo(userInfo);
      return user;
+    }
+    public void updateUsers(User user) throws Exception {
+            Long id=user.getId();
+        User dbUser = userDao.getUserByUserId(id);
+        if (dbUser==null){
+            throw  new ConditionException("用户不存在！");
+        }
+        if (!StringUtils.isNullOrEmpty(user.getPassword())){
+            String rawPassword = RSAUtil.decrypt(user.getPassword());
+            String md5Password = MD5Util.sign(rawPassword, dbUser.getPassword(), "UTF-8");
+            user.setPassword(md5Password);
+        }
+        user.setUpdateTime(new Date());
+        userDao.updateUsers(user);
+    }
+
+    public void updateUserInfos(UserInfo userInfo) {
+            userInfo.setUpdateTime(new Date());
+            userDao.updateUserInfos(userInfo);
+    }
+
+
+    public User getUserById(Long id) {
+            return  userDao.getUserByUserId(id);
+    }
+
+    public List<UserInfo> getUserInfoByUserIds(Set<Long> followingIdList) {
+            return  userDao.getUserInfoByUserIds(followingIdList);
+    }
+
+    public PageResult<UserInfo> pageListUserInfos(JSONObject params) {
+        Integer no = params.getInteger("no");
+        Integer size = params.getInteger("size");
+        params.put("start", (no-1)*size);
+        params.put("limit", size);
+        Integer total = userDao.pageCountUserInfos(params);
+        List<UserInfo> list = new ArrayList<>();
+        if(total > 0){
+            list = userDao.pageListUserInfos(params);
+        }
+        return new PageResult<>(total, list);
     }
 }

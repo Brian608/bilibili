@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.feather.bilibili.dao.FollowingGroupDao">
+
+
+
+    <select id="getByType" resultType="org.feather.bilibili.domain.FollowingGroup">
+        select * from t_following_group where  'type'=#{type}
+    </select>
+    <select id="getById" resultType="org.feather.bilibili.domain.FollowingGroup">
+select * from t_following_group where id =#{id}
+    </select>
+    <select id="getByUserId" resultType="org.feather.bilibili.domain.FollowingGroup">
+        select * from t_following_group
+where  user_id=#{userId} or 'type' in ('1','2','3');
+    </select>
+
+    <insert id="addFollowingGroup" useGeneratedKeys="true"  keyProperty="id">
+        insert into
+            t_following_group(
+            userId,
+            `name`,
+            `type`,
+            create_time
+        )values(
+                   #{userId},
+                   #{name},
+                   #{type},
+                   #{createTime}
+               )
+    </insert>
+
+    <select id="getUserFollowingGroups" resultType="org.feather.bilibili.domain.FollowingGroup">
+        select
+            *
+        from
+            t_following_group
+        where
+            userId = #{userId}
+    </select>
+</mapper>

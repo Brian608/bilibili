@@ -1,8 +1,13 @@
 package org.feather.bilibili.dao;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.Mapper;
 import org.feather.bilibili.domain.User;
 import org.feather.bilibili.domain.UserInfo;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @program: bilibili
@@ -22,4 +27,14 @@ public interface UserDao {
     User getUserByUserId(Long userId);
 
     UserInfo getUserInfoByUserId(Long userId);
+
+    void updateUsers(User user);
+
+    void  updateUserInfos(UserInfo userInfo);
+
+    List<UserInfo> getUserInfoByUserIds(Set<Long> followingIdList);
+
+    Integer pageCountUserInfos(Map<String,Object> params);
+
+    List<UserInfo> pageListUserInfos(Map<String, Object> params);
 }

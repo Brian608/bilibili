@@ -1,6 +1,5 @@
 package org.feather.bilibili.service;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.feather.bilibili.constant.UserConstant;
 import org.feather.bilibili.dao.UserFollowingDao;
 import org.feather.bilibili.domain.FollowingGroup;
@@ -9,6 +8,7 @@ import org.feather.bilibili.domain.UserFollowing;
 import org.feather.bilibili.domain.UserInfo;
 import org.feather.bilibili.domain.exception.ConditionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @author: 杜雪松(feather)
  * @since: 2022-05-02 12:50
  **/
-@Mapper
+@Service
 public class UserFollowingService {
     @Autowired
     private UserFollowingDao userFollowingDao;

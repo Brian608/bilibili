@@ -1,9 +1,7 @@
 package org.feather.bilibili.service;
 
-import org.feather.bilibili.domain.auth.AuthRoleElementOperation;
-import org.feather.bilibili.domain.auth.AuthRoleMenu;
-import org.feather.bilibili.domain.auth.UserAuthorities;
-import org.feather.bilibili.domain.auth.UserRole;
+import org.feather.bilibili.constant.AuthRoleConstant;
+import org.feather.bilibili.domain.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,4 +34,11 @@ public class UserAuthService {
         return userAuthorities;
     }
 
+    public void addUserDefaultRole(Long id) {
+        UserRole userRole = new UserRole();
+        AuthRole role = authRoleService.getRoleByCode(AuthRoleConstant.ROLE_LV0);
+        userRole.setUserId(id);
+        userRole.setRoleId(role.getId());
+        userRoleService.addUserRole(userRole);
+    }
 }

@@ -5,6 +5,7 @@ import org.feather.bilibili.domain.auth.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,4 +23,8 @@ public class UserRoleService {
         return userRoleDao.getUserRoleByUserId(userId);
     }
 
+    public void addUserRole(UserRole userRole) {
+        userRole.setCreateTime(new Date());
+        userRoleDao.addUserRole(userRole);
+    }
 }

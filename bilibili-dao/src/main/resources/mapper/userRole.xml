@@ -15,6 +15,18 @@
         where
             ur.userId = #{userId}
     </select>
+    <insert id="addUserRole" parameterType="org.feather.bilibili.domain.auth.UserRole">
+        insert into
+            t_user_role(
+            userId,
+            roleId,
+            create_time
+        )values(
+                   #{userId},
+                   #{roleId},
+                   #{createTime}
+               )
+    </insert>
 
 
 </mapper>

@@ -1,8 +1,11 @@
 package org.feather.bilibili.api;
 
 import org.feather.bilibili.api.support.UserSupport;
+import org.feather.bilibili.constant.AuthRoleConstant;
 import org.feather.bilibili.domain.JsonResponse;
 import org.feather.bilibili.domain.UserMoment;
+import org.feather.bilibili.domain.annoation.ApiLimitedRole;
+import org.feather.bilibili.domain.annoation.DataLimited;
 import org.feather.bilibili.service.UserMomentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,8 @@ public class UserMomentsApi {
     private UserSupport userSupport;
 
 
+    @ApiLimitedRole(limitedRoleCodeList = {AuthRoleConstant.ROLE_LV0})
+    @DataLimited
     @PostMapping("/user-moments")
     public JsonResponse<String> addUserMoments(@RequestBody UserMoment userMoment) throws Exception {
         Long userId = userSupport.getCurrentUserId();

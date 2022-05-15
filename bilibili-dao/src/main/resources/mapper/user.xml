@@ -38,6 +38,18 @@
                         #{createTime}
                     )
     </insert>
+    <insert id="addRefreshToken">
+        insert into
+            t_refresh_token(
+            refresh_token,
+            userId,
+            create_time
+        )values(
+                   #{refreshToken},
+                   #{userId},
+                   #{createTime}
+               )
+    </insert>
     <update id="updateUsers">
         update
         t_user
@@ -79,6 +91,13 @@
         where
         userId = #{userId}
     </update>
+    <delete id="deleteRefreshToken">
+        delete from
+            t_refresh_token
+        where
+            refreshToken = #{refreshToken}
+          and userId = #{userId}
+    </delete>
 
     <select id="getUserByPhone" parameterType="java.lang.String" resultType="org.feather.bilibili.domain.User">
         select * from t_user where phone= #{phone}
@@ -127,4 +146,32 @@
         order by id desc
         limit #{start}, #{limit}
     </select>
+    <select id="getRefreshTokenDetail" resultType="org.feather.bilibili.domain.RefreshTokenDetail">
+        select
+            *
+        from
+            t_refresh_token
+        where
+            refreshToken = #{refreshToken}
+    </select>
+    <select id="getRefreshTokenByUserId" resultType="java.lang.String">
+        select
+            refreshToken
+        from
+            t_refresh_token
+        where
+            userId = #{userId}
+    </select>
+    <select id="batchGetUserInfoByUserIds" resultType="org.feather.bilibili.domain.UserInfo">
+        select
+        *
+        from
+        t_user_info
+        where
+        userId in
+        <foreach collection="userIdList" item="userId" open="(" close=")" separator=",">
+            #{userId}
+        </foreach>
+    </select>
+
 </mapper>

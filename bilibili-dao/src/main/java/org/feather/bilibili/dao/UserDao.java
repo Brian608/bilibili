@@ -2,9 +2,12 @@ package org.feather.bilibili.dao;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.feather.bilibili.domain.RefreshTokenDetail;
 import org.feather.bilibili.domain.User;
 import org.feather.bilibili.domain.UserInfo;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,4 +40,14 @@ public interface UserDao {
     Integer pageCountUserInfos(Map<String,Object> params);
 
     List<UserInfo> pageListUserInfos(Map<String, Object> params);
+
+    void deleteRefreshToken(@Param("refreshToken") String refreshToken, @Param("userId") Long userId);
+
+    Integer addRefreshToken(@Param("refreshToken") String refreshToken, @Param("userId") Long userId, @Param("createTime") Date createTime);
+
+    RefreshTokenDetail getRefreshTokenDetail(String refreshToken);
+
+    String getRefreshTokenByUserId(Long userId);
+
+    List<UserInfo> batchGetUserInfoByUserIds(Set<Long> userIdList);
 }

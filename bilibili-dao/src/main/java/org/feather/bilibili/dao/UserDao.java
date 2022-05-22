@@ -1,6 +1,5 @@
 package org.feather.bilibili.dao;
 
-import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.feather.bilibili.domain.RefreshTokenDetail;

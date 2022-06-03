@@ -4,8 +4,11 @@ import org.feather.bilibili.domain.JsonResponse;
 import org.feather.bilibili.domain.exception.ConditionException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @program: bilibili
@@ -17,13 +20,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CommonGlobalExceptionHandler {
 
-    public JsonResponse<String> commonExceptionHandler(HttpRequest request,Exception e){
-        String errMsg=e.getMessage();
-        if (e instanceof ConditionException){
-            String errCode=((ConditionException) e).getCode();
-            return  new JsonResponse<>(errCode,errMsg);
-        }else {
-            return  new JsonResponse<>("500",errMsg);
+    @ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public JsonResponse<String> commonExceptionHandler(HttpServletRequest request, Exception e){
+        String errorMsg = e.getMessage();
+        if(e instanceof ConditionException){
+            String errorCode = ((ConditionException)e).getCode();
+            return new JsonResponse<>(errorCode, errorMsg);
+        }else{
+            return new JsonResponse<>("500",errorMsg);
         }
     }
 

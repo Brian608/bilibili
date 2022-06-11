@@ -2,7 +2,7 @@ package org.feather.bilibili.domain;
 
 /**
  * @program: bilibili
- * @description:
+ * @description:返回前端对象
  * @author: 杜雪松(feather)
  * @since: 2022-04-14 22:11
  **/

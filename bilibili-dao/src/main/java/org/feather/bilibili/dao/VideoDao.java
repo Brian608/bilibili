@@ -5,6 +5,7 @@ import org.feather.bilibili.domain.Video;
 import org.feather.bilibili.domain.VideoTag;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @projectName: bilibili
@@ -21,4 +22,8 @@ public interface VideoDao {
     Integer addVideos(Video video);
 
     Integer batchAddVideoTags(List<VideoTag> videoTagList);
+
+    Integer pageListVideosCount(Map<String, Object> paramMap);
+
+    List<Video> pageListVideos(Map<String, Object> paramMap);
 }

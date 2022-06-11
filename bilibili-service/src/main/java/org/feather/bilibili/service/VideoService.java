@@ -1,14 +1,15 @@
 package org.feather.bilibili.service;
 
 import org.feather.bilibili.dao.VideoDao;
+import org.feather.bilibili.domain.PageResult;
 import org.feather.bilibili.domain.Video;
 import org.feather.bilibili.domain.VideoTag;
+import org.feather.bilibili.domain.exception.ConditionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @projectName: bilibili
@@ -37,5 +38,21 @@ public class VideoService {
             item.setVideoId(videoId);
         });
         videoDao.batchAddVideoTags(tagList);
+    }
+
+    public PageResult<Video> pageListVideos(Integer size, Integer no, String area) {
+        if (size==null||no==null){
+            throw  new ConditionException("查询参数为空！");
+        }
+        Map<String, Object> paramMap=new HashMap<>();
+        paramMap.put("start",(no-1)*size);
+        paramMap.put("limit",size);
+        paramMap.put("area",area);
+        List<Video> list=new ArrayList<>();
+        Integer total = videoDao.pageListVideosCount(paramMap);
+        if (total>0){
+            list=videoDao.pageListVideos(paramMap);
+        }
+        return null;
     }
 }

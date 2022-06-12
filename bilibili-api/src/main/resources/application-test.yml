@@ -9,9 +9,15 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 1GB
 rocketmq:
   name:
     server:
-      address:127.0.0.1:9876
+      address: 127.0.0.1:9876
 fdfs:
-  tracker-list:
+  tracker-list: 127.0.0.1:22122
+  http:
+    storage-addr: htttp://127.0.0.1:8888/group1/

@@ -5,10 +5,13 @@ import org.feather.bilibili.domain.PageResult;
 import org.feather.bilibili.domain.Video;
 import org.feather.bilibili.domain.VideoTag;
 import org.feather.bilibili.domain.exception.ConditionException;
+import org.feather.bilibili.service.utils.FastDFSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -25,6 +28,9 @@ public class VideoService {
 
     @Autowired
     private VideoDao videoDao;
+
+    @Autowired
+    FastDFSUtil fastDFSUtil;
 
     @Transactional(rollbackFor = Exception.class)
     public void addVideos(Video video) {
@@ -54,5 +60,9 @@ public class VideoService {
             list=videoDao.pageListVideos(paramMap);
         }
         return null;
+    }
+
+    public void viewVideoOnlineBySlices(HttpServletRequest request, HttpServletResponse response, String url) throws Exception {
+        fastDFSUtil.viewVideoOnlineBySlices(request,response,url);
     }
 }

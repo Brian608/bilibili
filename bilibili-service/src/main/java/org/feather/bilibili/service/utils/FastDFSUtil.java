@@ -5,6 +5,7 @@ import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.domain.proto.storage.DownloadCallback;
 import com.github.tobato.fastdfs.service.AppendFileStorageClient;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
+import org.apache.commons.lang3.StringUtils;
 import org.feather.bilibili.domain.exception.ConditionException;
 import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,9 @@ public class FastDFSUtil {
 
     @Value("${fdfs.http.storage-addr}")
     private String httpFdfsStorageAddr;
+
+    @Value("${fdfs.http.storge-addr}")
+    private String getHttpFdfsStorageAddr;
 
     public String getFileType(MultipartFile file){
         if(file == null){
@@ -186,5 +190,40 @@ public class FastDFSUtil {
                         return "success";
                     }
                 });
+    }
+
+    public void viewVideoOnlineBySlices(HttpServletRequest request, HttpServletResponse response, String path) throws Exception {
+        FileInfo fileInfo = fastFileStorageClient.queryFileInfo(DEFAULT_GROUP, path);
+        long fileSize = fileInfo.getFileSize();
+        String url=getHttpFdfsStorageAddr+path;
+        Enumeration<String> headerNames = request.getHeaderNames();
+        Map<String, Object> headMap=new HashMap<>();
+        while (headerNames.hasMoreElements()){
+            String header = headerNames.nextElement();
+            headMap.put(header,request.getHeader(header));
+        }
+        String rangeStr = request.getHeader("range");
+        String [] range;
+        if (StringUtils.isBlank(rangeStr)){
+            rangeStr="bytes-0"+(fileSize-1);
+        }
+        range=rangeStr.split("bytes|-");
+        long begin=0;
+        if (range.length>=2){
+            begin=Long.parseLong(range[1]);
+        }
+        long end=fileSize-1;
+        if (range.length>=3){
+            end=Long.parseLong(range[2]);
+        }
+        long len=(end-begin) +1;
+        String contentRange = "bytes " + begin + "-" + end + "/" + fileSize;
+        response.setHeader("Content-Range", contentRange);
+        response.setHeader("Accept-Ranges", "bytes");
+        response.setHeader("Content-Type", "video/mp4");
+        response.setContentLength((int)len);
+        response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
+        HttpUtil.get(url, headMap, response);
+
     }
 }

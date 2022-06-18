@@ -18,10 +18,6 @@ import java.io.UnsupportedEncodingException;
  *   @since: 2022-04-14 21:57
  *  */
 
-
-
-
-
 public class MD5Util {
 
     public static String sign(String content, String salt, String charset) {
@@ -47,7 +43,12 @@ public class MD5Util {
         }
     }
 
-    //获取文件md5加密后的字符串
+    /**
+     * 获取文件md5加密后的字符串
+     * @param file
+     * @return
+     * @throws Exception
+     */
     public static String getFileMD5(MultipartFile file) throws Exception {
         InputStream fis = file.getInputStream();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

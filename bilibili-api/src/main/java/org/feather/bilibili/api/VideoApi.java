@@ -4,6 +4,7 @@ import org.feather.bilibili.api.support.UserSupport;
 import org.feather.bilibili.domain.JsonResponse;
 import org.feather.bilibili.domain.PageResult;
 import org.feather.bilibili.domain.Video;
+import org.feather.bilibili.service.ElasticSearchService;
 import org.feather.bilibili.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,8 @@ public class VideoApi {
 
     @Autowired
     private UserSupport userSupport;
+    @Autowired
+    private ElasticSearchService elasticSearchService;
 
     /**
      * 视频投稿
@@ -40,6 +43,8 @@ public class VideoApi {
         Long userId = userSupport.getCurrentUserId();
         video.setUserId(userId);
         videoService.addVideos(video);
+        //在es中添加数据
+        elasticSearchService.addVideo(video);
         return JsonResponse.success();
     }
     @GetMapping("/videos")

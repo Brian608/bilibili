@@ -13,6 +13,9 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 1GB
+  elasticsearch:
+    rest:
+      uris: http://127.0.0.1:9200
 rocketmq:
   name:
     server:

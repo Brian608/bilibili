@@ -1,5 +1,10 @@
 package org.feather.bilibili.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
 import java.util.Date;
 
 /**
@@ -8,11 +13,14 @@ import java.util.Date;
  * @author: 杜雪松(feather)
  * @since: 2022-04-16 21:36
  **/
+@Document(indexName = "user-infos")
 public class UserInfo {
+    @Id
     private Long id;
 
     private Long userId;
 
+    @Field(type = FieldType.Text)
     private String nick;
 
     private String avatar;
@@ -23,8 +31,10 @@ public class UserInfo {
 
     private String birth;
 
+    @Field(type = FieldType.Date)
     private Date createTime;
 
+    @Field(type = FieldType.Date)
     private Date updateTime;
 
     private Boolean followed;

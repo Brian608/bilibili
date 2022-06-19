@@ -2,10 +2,7 @@ package org.feather.bilibili.api;
 
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.feather.bilibili.api.support.UserSupport;
-import org.feather.bilibili.domain.JsonResponse;
-import org.feather.bilibili.domain.PageResult;
-import org.feather.bilibili.domain.Video;
-import org.feather.bilibili.domain.VideoView;
+import org.feather.bilibili.domain.*;
 import org.feather.bilibili.service.ElasticSearchService;
 import org.feather.bilibili.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +84,17 @@ public class VideoApi {
     public JsonResponse<List<Video>> recommend() throws TasteException {
         Long userId = userSupport.getCurrentUserId();
         List<Video> list = videoService.recommend(userId);
+        return new JsonResponse<>(list);
+    }
+
+
+    /**
+     * 视频帧截取生成黑白剪影
+     */
+    @GetMapping("/video-frames")
+    public JsonResponse<List<VideoBinaryPicture>> captureVideoFrame(@RequestParam Long videoId,
+                                                                    @RequestParam String fileMd5) throws Exception {
+        List<VideoBinaryPicture> list = videoService.convertVideoToImage(videoId, fileMd5);
         return new JsonResponse<>(list);
     }
 }

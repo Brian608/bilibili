@@ -61,6 +61,26 @@
                        #{createTime}
                    )
         </insert>
+    <insert id="batchAddVideoBinaryPictures">
+        insert into
+        t_video_binary_picture(
+        videoId,
+        frameNo,
+        url,
+        videoTimestamp,
+        createTime
+        )
+        values
+        <foreach collection="pictureList" item="picture" separator=",">
+            (
+            #{picture.videoId},
+            #{picture.frameNo},
+            #{picture.url},
+            #{picture.videoTimestamp},
+            #{picture.createTime}
+            )
+        </foreach>
+    </insert>
     <select id="pageListVideosCount" resultType="java.lang.Integer">
         select count(1) from t_video where  1=1
             <if test="area!=null and area!=''">

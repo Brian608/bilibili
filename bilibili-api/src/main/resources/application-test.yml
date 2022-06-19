@@ -24,3 +24,13 @@ fdfs:
   tracker-list: 127.0.0.1:22122
   http:
     storage-addr: htttp://127.0.0.1:8888/group1/
+logging:
+  level: debug
+baidu:
+  develop:
+    clientId: sbjRmx1aqUBE1FRicpKfh4M1
+    clientSecret: 7T6E3sajEAqkA38klRVGaXusNYB0QbZC
+    auth:
+      url: https://aip.baidubce.com/oauth/2.0/token
+    splitBody:
+      url: https://aip.baidubce.com/rest/2.0/image-classify/v1/body_seg

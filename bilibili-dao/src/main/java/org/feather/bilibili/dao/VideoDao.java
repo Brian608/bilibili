@@ -1,10 +1,7 @@
 package org.feather.bilibili.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.feather.bilibili.domain.UserPreference;
-import org.feather.bilibili.domain.Video;
-import org.feather.bilibili.domain.VideoTag;
-import org.feather.bilibili.domain.VideoView;
+import org.feather.bilibili.domain.*;
 
 import java.util.List;
 import java.util.Map;
@@ -38,4 +35,6 @@ public interface VideoDao {
     List<UserPreference> getAllUserPreference();
 
     List<Video> batchGetVideosByIds(List<Long> itemIds);
+
+    void batchAddVideoBinaryPictures(List<VideoBinaryPicture> pictures);
 }

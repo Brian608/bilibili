@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.MediaType;
+
+import java.util.Collections;
 
 /**
  * @program: bilibili
@@ -32,6 +35,8 @@ public class JsonHttpMessageConvertConfig {
                 SerializerFeature.DisableCircularReferenceDetect
         );
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
+        //如果使用feign 进行为服务调用，则需要加上该配置
+       fastJsonHttpMessageConverter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
         return new HttpMessageConverters(fastJsonHttpMessageConverter);
     }
 }

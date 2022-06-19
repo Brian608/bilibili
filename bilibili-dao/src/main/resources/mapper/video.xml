@@ -44,7 +44,24 @@
             )
         </foreach>
     </insert>
-        <select id="pageListVideosCount" resultType="java.lang.Integer">
+
+        <insert id="addVideoView" parameterType="com.imooc.bilibili.domain.VideoView">
+            insert into
+                t_video_view(
+                video_id,
+                user_id,
+                client_id,
+                ip,
+                create_time
+            )values(
+                       #{videoId},
+                       #{userId},
+                       #{clientId},
+                       #{ip},
+                       #{createTime}
+                   )
+        </insert>
+    <select id="pageListVideosCount" resultType="java.lang.Integer">
         select count(1) from t_video where  1=1
             <if test="area!=null and area!=''">
                 and area= #{area}
@@ -58,4 +75,58 @@
             order by id desc
         limit #{start},#{limit}
     </select>
+    <select id="getVideoView" parameterType="java.util.Map" resultType="org.feather.bilibili.domain.VideoView">
+        select
+        *
+        from
+        t_video_view
+        where
+        videoId = #{videoId}
+        <if test="userId == null and clientId != null">
+            and clientId = #{clientId} and userId is null
+        </if>
+        <if test="userId != null">
+            and userId = #{userId}
+        </if>
+        <if test="ip != null and ip != '' ">
+            and ip = #{ip}
+        </if>
+        <if test="today != null and today != '' ">
+            and DATE_FORMAT(createTime,'%Y-%m-%d') = #{today}
+        </if>
+    </select>
+    <select id="getVideoViewCounts" resultType="java.lang.Integer">
+        select
+            count(1)
+        from
+            t_video_view
+        where
+            videoId = #{videoId}
+    </select>
+    <select id="getAllUserPreference" resultType="org.feather.bilibili.domain.UserPreference">
+        select
+            user_id,
+            video_id,
+            sum(case operation_type
+                    when '0' then 6
+                    when '1' then 2
+                    when '2' then 2
+                    else 0 end
+                ) as `value`
+        from
+            t_video_operation
+        group by userId, videoId
+    </select>
+    <select id="batchGetVideosByIds" resultType="org.feather.bilibili.domain.Video">
+        select
+        *
+        from
+        t_video
+        where
+        id in
+        <foreach collection="idList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
 </mapper>
